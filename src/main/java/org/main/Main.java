@@ -7,11 +7,14 @@ import org.main.logger.Logger;
 
 public class Main {
     public static void main(String[] args) {
-        FileLoggerConfigLoader loader = new FileLoggerConfigLoader("config.txt");
-        Logger logger = new FileLogger((FileLoggerConfig) loader.load());
+        FileLoggerConfigLoader loader = new FileLoggerConfigLoader();
+        Logger logger = new FileLogger((FileLoggerConfig) loader.load("configs/config.txt"));
 
-        logger.debug("Debug");
-        logger.info("info");
+
+        for(int i = 0; i < 10; i++) {
+            logger.debug("Debug");
+            logger.info("info");
+        }
 
     }
 }

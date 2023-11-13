@@ -40,4 +40,4 @@ build/
 
 .idea
 logs
-config.txt
+configs/config.txt
