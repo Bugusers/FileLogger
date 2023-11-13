@@ -3,10 +3,10 @@ package org.main.config;
 import org.main.LoggingLevel;
 
 public class FileLoggerConfig implements LoggerConfig {
-    private final String logFilePath;
+    private String logFilePath;
     private final Long maxLogFileSize;
     private final LoggingLevel logLevel;
-    private final String logFormat;
+    private String logFormat;
 
 
 
@@ -36,4 +36,9 @@ public class FileLoggerConfig implements LoggerConfig {
     public String getLogFormat() {
         return logFormat;
     }
+
+    public void changLogFile(String newLogFilePath) {
+        logFilePath = newLogFilePath;
+    };
+
 }

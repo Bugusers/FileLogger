@@ -3,74 +3,83 @@ package org.main.logger;
 import org.main.LoggingLevel;
 import org.main.config.FileLoggerConfig;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Random;
+
 
 public class FileLogger implements Logger {
     private final FileLoggerConfig config;
-    private File currentLogFile;
-    private long currentLogFileSize;
 
     public FileLogger(FileLoggerConfig config) {
         this.config = config;
-        this.currentLogFile = new File(config.getLogFilePath());
-        this.currentLogFileSize = currentLogFile.length();
+    }
+
+    public FileLoggerConfig getConfig() {
+        return config;
     }
 
     @Override
     public void info(String message) {
-        logMessage(LoggingLevel.INFO, message);
+        if (config.getLogLevel().isVisible(LoggingLevel.INFO)) {
+            writeLog("INFO: " + message);
+        }
     }
 
     @Override
     public void debug(String message) {
-        logMessage(LoggingLevel.DEBUG, message);
-    }
-
-
-    private void logMessage(LoggingLevel level, String message) {
-        if (currentLogFileSize + message.length() > config.getMaxLogFileSize()) {
-            createNewLogFile();
+        if (config.getLogLevel().isVisible(LoggingLevel.DEBUG)) {
+            writeLog("DEBUG: " + message);
         }
-
-        String formattedMessage = formatLogMessage(level, message);
-        writeLogMessage(formattedMessage);
     }
 
-    private void createNewLogFile() {
-        String newLogFilePath = generateNewLogFilePath();
+    private void writeLog(String logMessage) {
+        String logFilePath = config.getLogFilePath();
+        String logFormat = config.getLogFormat();
 
-        currentLogFile = new File(newLogFilePath);
-        currentLogFileSize = 0;
-    }
-
-    private String formatLogMessage(LoggingLevel level, String message) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.format(new Date()) + " [" + level + "] " + message;
-    }
-
-    private void writeLogMessage(String message) {
-        if (currentLogFile != null) {
-            try (PrintWriter writer = new PrintWriter(new FileWriter(currentLogFile, true))) {
-                writer.println(message);
-                updateCurrentLogFileSize(message.length());
-            } catch (IOException e) {
-                e.printStackTrace();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(logFilePath, true))) {
+            if (config.getMaxLogFileSize() > 0) {
+                long fileSize = new File(logFilePath).length();
+                if (fileSize > config.getMaxLogFileSize()) {
+                    rotateLogFile();
+                }
             }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String timestamp = dateFormat.format(new Date());
+            String formattedMessage = String.format(logFormat, timestamp, config.getLogLevel(), logMessage);
+
+            writer.println(formattedMessage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    private void rotateLogFile() {
+        String newLogFilePath = generateNewLogFilePath();
+        config.changLogFile(newLogFilePath);
     }
 
     private String generateNewLogFilePath() {
         String logFilePath = config.getLogFilePath();
-        String logFileExtension = logFilePath.substring(logFilePath.lastIndexOf('.'));
-        return logFilePath.replace(logFileExtension, "_" + new SimpleDateFormat("dd.MM.yyyy-HH.mm").format(new Date()) + logFileExtension);
+
+        int lastIndexOfSlash = logFilePath.lastIndexOf("/");
+        if (lastIndexOfSlash == -1) {
+            return logFilePath;
+        }
+
+
+        String newLogFileName = "Log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + "_" + generateRandomNumber() + ".txt";
+
+        return logFilePath.substring(0, lastIndexOfSlash) + "/" + newLogFileName;
     }
 
-    private void updateCurrentLogFileSize(long len) {
-        currentLogFileSize += len;
+    private int generateRandomNumber() {
+        return new Random().nextInt(10000);
     }
+
 }
