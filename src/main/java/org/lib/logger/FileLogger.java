@@ -1,7 +1,6 @@
-package org.main.logger;
+package org.lib.logger;
 
-import org.main.LoggingLevel;
-import org.main.config.FileLoggerConfig;
+import org.lib.config.FileLoggerConfig;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -81,5 +80,4 @@ public class FileLogger implements Logger {
     private int generateRandomNumber() {
         return new Random().nextInt(10000);
     }
-
 }

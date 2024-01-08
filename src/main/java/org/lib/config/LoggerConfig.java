@@ -1,10 +1,10 @@
-package org.main.config;
+package org.lib.config;
 
-import org.main.LoggingLevel;
+import org.lib.logger.LoggingLevel;
 
 public interface LoggerConfig{
     String getLogFilePath();
-    long getMaxLogFileSize() ;
+    int getMaxLogFileSize() ;
     LoggingLevel getLogLevel();
     String getLogFormat();
 }

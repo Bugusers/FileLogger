@@ -1,15 +1,15 @@
-package org.main.config_loader;
+package org.lib.config_loader;
 
-import org.main.LoggingLevel;
-import org.main.config.FileLoggerConfig;
-import org.main.config.LoggerConfig;
+import org.lib.logger.LoggingLevel;
+import org.lib.config.FileLoggerConfig;
+import org.lib.config.LoggerConfig;
 
 import java.io.*;
 
 public class FileLoggerConfigLoader implements LoggerConfigLoader {
     private static final String KEY_FILE = "FILE";
     private static final String KEY_LEVEL = "LEVEL";
-    private static final String KEY_MAX_SIZE = "MAX-SIZE";
+    private static final String KEY_MAX_SIZE = "MAX_SIZE";
     private static final String KEY_FORMAT = "FORMAT";
 
 
@@ -88,7 +88,6 @@ public class FileLoggerConfigLoader implements LoggerConfigLoader {
             return new FileLoggerConfig(logFilePath, maxLogFileSize, logLevel, logFormat);
         }
 
-
         return createDefaultConfiguration();
     }
 
@@ -98,7 +97,7 @@ public class FileLoggerConfigLoader implements LoggerConfigLoader {
         String logFilePath = "logs/Log.txt";
         int maxLogFileSize = 1024;
         LoggingLevel logLevel = LoggingLevel.INFO;
-        String logFormat = "[%s][%s] Message: [%s]";
+        String logFormat = "[%s][%s] Message - [%s]";
 
         return new FileLoggerConfig(logFilePath, maxLogFileSize, logLevel, logFormat);
     }
