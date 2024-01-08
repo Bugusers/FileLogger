@@ -1,4 +1,4 @@
-package org.main.logger;
+package org.lib.logger;
 
 public interface Logger {
     void info(String message);

@@ -1,4 +1,4 @@
-package org.main;
+package org.lib.logger;
 
 public enum LoggingLevel {
     INFO,

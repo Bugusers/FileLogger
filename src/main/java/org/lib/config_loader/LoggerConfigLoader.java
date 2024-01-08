@@ -1,6 +1,6 @@
-package org.main.config_loader;
+package org.lib.config_loader;
 
-import org.main.config.LoggerConfig;
+import org.lib.config.LoggerConfig;
 
 import java.io.File;
 import java.io.InputStream;

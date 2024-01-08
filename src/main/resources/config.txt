@@ -1,7 +1,7 @@
-FILE: logs/test/Log-Debug.txt
+FILE: logs/mainLogs/Log.txt
 
 LEVEL: DEBUG
 
-MAX-SIZE: 200
+MAX-SIZE: 2000
 
 FORMAT: [%s][%s] Message - %s
